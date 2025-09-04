@@ -33,3 +33,4 @@ Soal 4
 Buatlah penjelasan dan contoh eksekusi kode tentang perbedaan Null Safety dan Late variabel !
 
 - null safety adalah rules agar tidak ada variable yang berisikan null, tetapi jika kita memang ingin variable itu berisikan null, maka gunakan "?" di sebelah variable. Contoh String? name = null atau juga bisa String? name;
+- digunakan untuk mendeklarasikan variabel yang memang ingin diinisialisasi belakangan (bukan saat deklarasi)
