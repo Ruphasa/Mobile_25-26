@@ -12,7 +12,7 @@ if (test == "test2") print("Test2 again");
 
 bool testing = true;
 if (testing) {
-  print("Kebenaran");
+  print("Kebenaran"); 
 }
 
 }
