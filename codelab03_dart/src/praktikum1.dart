@@ -1,6 +1,4 @@
-import 'dart:math';
-
-void main () {
+void main() {
   String test = "test2";
 if (test == "test1") {
   print("Test1");
