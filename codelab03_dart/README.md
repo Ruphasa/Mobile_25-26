@@ -1,3 +1,7 @@
+    Name   : Rizqi Fauzan
+    NIM    : 2341720143
+    Kelas  : TI-3H
+
 ## Praktikum 1: Menerapkan Control Flows ("if/else")
 Langkah 1:
 Ketik atau salin kode program berikut ke dalam fungsi `main()`.
