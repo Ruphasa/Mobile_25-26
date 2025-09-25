@@ -1,0 +1,18 @@
+void main() {
+  var halogens = {'fluorine', 'chlorine', 'bromine', 'iodine', 'astatine'};
+  print(halogens);
+
+  var names1 = <String>{};
+  Set<String> names2 = {}; // This works, too.
+  // var names3 = {}; // Creates a map, not a set.
+
+  print(names1);
+  print(names2);
+  // print(names3);
+
+  names1.addAll({'Rizqi Fauzan', '2341720143'});
+  names2.addAll({'Rizqi Fauzan', '2341720143'});
+
+  print(names1);
+  print(names2);
+}
