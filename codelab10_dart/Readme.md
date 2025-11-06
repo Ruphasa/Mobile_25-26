@@ -193,10 +193,17 @@ Lakukan Hot restart (bukan hot reload) pada aplikasi Flutter Anda. Anda akan mel
 3. Mengapa perlu variabel plan di langkah 6 pada praktikum tersebut? Mengapa dibuat konstanta ?
 - karena untuk const plan dibuat agar tidak berubah tetapi yang diubah adalah Plan plan yang menggunakan const plan sebagai template.
 4. Lakukan capture hasil dari Langkah 9 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+![](img/praktikum1.gif)
 5. Apa kegunaan method pada Langkah 11 dan 13 dalam lifecyle state ?
 - langkah 11 untuk menaikan form ketika keyboard dibuka
 - langkah 13 untuk mendispose effect menaikkan itu
 6. Kumpulkan laporan praktikum Anda berupa link commit atau repository GitHub ke dosen yang telah disepakati !
+
+setelah perbaikan
+
+![](img/praktikum1fix.gif)
+
+
 
 Praktikum 2: Mengelola Data Layer dengan InheritedWidget dan InheritedNotifier
 Bagaimana seharusnya Anda mengakses data pada aplikasi?
@@ -329,8 +336,12 @@ Terakhir, tambahkan widget SafeArea dengan berisi completenessMessage pada akhir
 ### Tugas Praktikum 2: InheritedWidget
 1. Selesaikan langkah-langkah praktikum tersebut, lalu dokumentasikan berupa GIF hasil akhir praktikum beserta penjelasannya di file README.md! Jika Anda menemukan ada yang error atau tidak berjalan dengan baik, silakan diperbaiki sesuai dengan tujuan aplikasi tersebut dibuat.
 2. Jelaskan mana yang dimaksud InheritedWidget pada langkah 1 tersebut! Mengapa yang digunakan InheritedNotifier?
+- masterplan sebagai main page yang berisikan list list plan ketika dibuka akan mengepush page yang bersangkutan
 3. Jelaskan maksud dari method di langkah 3 pada praktikum tersebut! Mengapa dilakukan demikian?
+- untuk mengambil jumlah list di plan
 4. Lakukan capture hasil dari Langkah 9 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+![](img/praktikum2.gif)
+- untuk mengambil list yang telah dicentang.
 5. Kumpulkan laporan praktikum Anda berupa link commit atau repository GitHub ke dosen yang telah disepakati !
 
 ## Praktikum 3: Membuat State di Multiple Screens
@@ -339,15 +350,15 @@ Terakhir, tambahkan widget SafeArea dengan berisi completenessMessage pada akhir
 Perhatikan kode berikut, edit class PlanProvider sehingga dapat menangani List Plan.
 
     class PlanProvider extends
-    InheritedNotifier<ValueNotifier<List<Plan>>> {
-    const PlanProvider({super.key, required Widget child, required
-    ValueNotifier<List<Plan>> notifier})
-        : super(child: child, notifier: notifier);
+        InheritedNotifier<ValueNotifier<List<Plan>>> {
+        const PlanProvider({super.key, required Widget child, required
+        ValueNotifier<List<Plan>> notifier})
+            : super(child: child, notifier: notifier);
 
-    static ValueNotifier<List<Plan>> of(BuildContext context) {
-        return context.
-    dependOnInheritedWidgetOfExactType<PlanProvider>()!.notifier!;
-    }
+        static ValueNotifier<List<Plan>> of(BuildContext context) {
+            return context.
+        dependOnInheritedWidgetOfExactType<PlanProvider>()!.notifier!;
+        }
     }
 ### Langkah 2: Edit main.dart
 Langkah sebelumnya dapat menyebabkan error pada main.dart dan plan_screen.dart. Pada method build, gantilah menjadi kode seperti ini.
@@ -572,7 +583,8 @@ Tambahkan widget seperti kode berikut.
 ### Tugas Praktikum 3: State di Multiple Screens
 1. Selesaikan langkah-langkah praktikum tersebut, lalu dokumentasikan berupa GIF hasil akhir praktikum beserta penjelasannya di file README.md! Jika Anda menemukan ada yang error atau tidak berjalan dengan baik, silakan diperbaiki sesuai dengan tujuan aplikasi tersebut dibuat.
 2. Berdasarkan Praktikum 3 yang telah Anda lakukan, jelaskan maksud dari gambar diagram berikut ini!
-
-
+![](img/diagram.png)
+- Anggap saja Master adalah main page dimana ada sidebar yang ketika ditekan page plan diload.
 3. Lakukan capture hasil dari Langkah 14 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+![](img/praktikum3.gif)
 4. Kumpulkan laporan praktikum Anda berupa link commit atau repository GitHub ke dosen yang telah disepakati !
