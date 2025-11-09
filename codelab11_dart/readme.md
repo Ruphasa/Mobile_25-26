@@ -1,16 +1,11 @@
----
-
 # Laporan Jobsheet 11
 
 ## Pemrograman Asynchronous Flutter
 
-### Identitas Praktikan
+  - **Nama :** Rizqi Fauzan
+  - **NIM :** 23417290143
+  - **Kelas :** TI-3H
 
-- **Nama : ** Rizqi Fauzan
-- **NIM : ** 23417290143
-- **Kelas : ** TI-3H
-
----
 
 ## Praktikum 1
 
@@ -197,6 +192,8 @@ class _FuturePageState extends State<FuturePage> {
 }
 ```
 
+![](img/praktikum2.gif)
+
 ---
 
 ## Soal Praktikum
@@ -314,13 +311,16 @@ Soal 5
 
 - Jelaskan maksud kode langkah 2 tersebut!
   Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 5".
-!()[]
+
+![](img/praktikum3.gif)
+- completer. another method of future that trigger when calculate complate
 
 Soal 6
 
 - Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
   Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 6".
-![]()
+![](img/praktikum3.gif)
+- is the same, but have error handler
 ---
 
 ***
@@ -421,7 +421,7 @@ class _FuturePageState extends State<FuturePage> {
 
 ### Soal 7
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 7**".
-![](img/)
+![](img/praktikum4.gif)
 
 ### Soal 8
 - Jelaskan maksud perbedaan kode pada langkah FutureGroup dengan kode pada Future.wait (lihat langkah 4 di materi praktikum)!
@@ -434,7 +434,8 @@ class _FuturePageState extends State<FuturePage> {
     ]);
     ```
   - Jawaban perbedaan dapat langsung dituliskan pada README di bawah ini.
-    - array yang berisikan future lebih dari satu. sehingga ketika array itu dijalankan maka isi yang lebih dari satu itu berjalan bersamaan
+    - pada langkah 1 array mendeklarasikan di dalam fungsi
+    - pada langkah 4 array dideklarasikan diluar fungsi yang berisikan future lebih dari satu. sehingga ketika array itu dijalankan maka isi yang lebih dari satu itu berjalan bersamaan
 
 ***
 
@@ -496,6 +497,7 @@ class _FuturePageState extends State<FuturePage> {
     }
   }
 ```
+![](img/praktikum5.gif)
 
 ***
 
@@ -503,6 +505,7 @@ class _FuturePageState extends State<FuturePage> {
 
 ### Soal 9
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
+![](img/soalpraktikum5.gif)
 
 ### Soal 10
 - Panggil method `handleError()` di `ElevatedButton`, lalu run.
@@ -510,10 +513,12 @@ class _FuturePageState extends State<FuturePage> {
     - Langkah 1 menggunakan `.then().catchError()`
     - Langkah 4 menggunakan `async/await` dengan blok `try-catch`
 - Tulis penjelasan langsung di README.
+  - banyak samanya sih.
 
 ***
+## laporan Praktikum 6
 
-## Persiapan Project
+### Persiapan Project
 
 1. **Install plugin geolocator:**
    ```bash
@@ -622,6 +627,8 @@ class MyApp extends StatelessWidget {
   - bisa dengan akurat, kebetulan laptop saya ada gpsnya ?
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Commit dengan pesan "**W11: Soal 12**".
 
+![](img/praktikum6.gif)
+
 ***
 
 ## Kode Lengkap Praktikum 7 — geolocation.dart
@@ -683,7 +690,9 @@ class _LocationScreenState extends State<LocationScreen> {
 **Soal 13**  
 - Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
   - ada perbedaan animasi loading dan clean code.
+  - pada backend ada await jika belum connect
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Commit dengan pesan "**W11: Soal 13**".
+![](img/praktikum7.gif)
 
 ***
 
@@ -830,9 +839,8 @@ class MyApp extends StatelessWidget {
 
 - Uji navigasi dan fitur perubahan warna dengan memilih warna pada halaman kedua.
 - Capture hasil aplikasi (GIF/Screenshot) dan lampirkan di README.
+![](img/praktikum8.gif)
 - Commit dengan pesan: "**W11: Navigation Praktikum 8**".
-
-Berikut adalah README yang sudah saya buat sesuai format yang Anda minta (Laporan Praktikum 9, Judul, Kode Final, dan Soal Praktikum):
 
 # Laporan Praktikum 9
 
@@ -943,7 +951,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-![](img/)
+![](img/praktikum9.gif)
 ---
 
 ## Soal 17
@@ -986,7 +994,7 @@ TextButton(
   },
 ),
 ```
-![]()
+![](img/soalpraktikum9.gif)
 ***
 
 Reference : [codelab 11](https://jti-polinema.github.io/flutter-codelab/11-async)
