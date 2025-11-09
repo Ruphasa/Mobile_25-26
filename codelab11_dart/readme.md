@@ -832,6 +832,161 @@ class MyApp extends StatelessWidget {
 - Capture hasil aplikasi (GIF/Screenshot) dan lampirkan di README.
 - Commit dengan pesan: "**W11: Navigation Praktikum 8**".
 
+Berikut adalah README yang sudah saya buat sesuai format yang Anda minta (Laporan Praktikum 9, Judul, Kode Final, dan Soal Praktikum):
+
+# Laporan Praktikum 9
+
+## Memanfaatkan async/await dengan Widget Dialog
+
+Pada praktikum ini, Anda akan memanfaatkan widget `AlertDialog` di Flutter. Anda bisa manfaatkan widget ini misal untuk memilih operasi Save, Delete, Accept, dan sebagainya.
+
+---
+
+## File: `navigation_dialog.dart`
+
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationDialogScreen extends StatefulWidget {
+  const NavigationDialogScreen({super.key});
+
+  @override
+  State<NavigationDialogScreen> createState() =>
+      _NavigationDialogScreenState();
+}
+
+class _NavigationDialogScreenState extends State<NavigationDialogScreen> {
+  Color color = Colors.blue.shade700;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(
+        title: const Text('Navigation Dialog Screen'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () {
+            _showColorDialog(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  _showColorDialog(BuildContext context) async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('Very important question'),
+          content: const Text('Please choose a color'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Red'),
+              onPressed: () {
+                color = Colors.red.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            TextButton(
+              child: const Text('Green'),
+              onPressed: () {
+                color = Colors.green.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            TextButton(
+              child: const Text('Blue'),
+              onPressed: () {
+                color = Colors.blue.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+          ],
+        );
+      },
+    );
+    setState(() {});
+  }
+}
+```
+
+***
+
+## File: `main.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:books/navigation_dialog.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const NavigationDialogScreen(),
+    );
+  }
+}
+```
+
+![](img/)
+---
+
+## Soal 17
+
+### 1. Cobalah klik setiap button, apa yang terjadi? Mengapa demikian?
+
+**Jawaban:**
+
+Ketika setiap button (Red, Green, Blue) diklik, background aplikasi akan berubah warna sesuai dengan warna yang dipilih.
+
+**Penjelasan:**
+- Setiap `TextButton` memiliki `onPressed` handler yang mengubah nilai variabel `color` menjadi warna yang sesuai
+- Setelah mengubah nilai `color`, method `Navigator.pop(context, color)` dipanggil untuk menutup dialog
+- Setelah dialog ditutup, method `setState(() {})` dipanggil dalam method `_showColorDialog()`
+- `setState()` menyebabkan widget di-rebuild dengan nilai `color` yang baru
+- Widget `Scaffold` menggunakan variabel `color` sebagai `backgroundColor`, sehingga background berubah sesuai nilai terbaru
+
+### 2. Gantilah 3 warna pada langkah 3 dengan warna favorit Anda!
+
+```dart
+TextButton(
+  child: const Text('blue'),
+  onPressed: () {
+    color = Colors.blue.shade700;
+    Navigator.pop(context, color);
+  },
+),
+TextButton(
+  child: const Text('Teal'),
+  onPressed: () {
+    color = Colors.teal.shade700;
+    Navigator.pop(context, color);
+  },
+),
+TextButton(
+  child: const Text('indigo'),
+  onPressed: () {
+    color = Colors.indigo.shade700;
+    Navigator.pop(context, color);
+  },
+),
+```
+![]()
 ***
 
 Reference : [codelab 11](https://jti-polinema.github.io/flutter-codelab/11-async)
