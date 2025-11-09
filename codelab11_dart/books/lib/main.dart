@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'geolocation.dart';
+import 'navigation_first.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,8 +11,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Aplikasi Lokasi - Rizqi',
-      home: const LocationScreen(),
+      title: 'Navigation Future Demo',
+      home: const NavigationFirst(),
     );
   }
 }
