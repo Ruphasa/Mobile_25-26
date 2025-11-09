@@ -11,10 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FutureGroup Demo',
-      home: const FuturePage(),
-    );
+    return MaterialApp(title: 'FutureGroup Demo', home: const FuturePage());
   }
 }
 
@@ -31,10 +28,12 @@ class _FuturePageState extends State<FuturePage> {
     await Future.delayed(const Duration(seconds: 3));
     return 1;
   }
+
   Future<int> returnTwoAsync() async {
     await Future.delayed(const Duration(seconds: 3));
     return 2;
   }
+
   Future<int> returnThreeAsync() async {
     await Future.delayed(const Duration(seconds: 3));
     return 3;
@@ -65,11 +64,20 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                runParallel();
-              }
+                returnError()
+                  .then((value){
+                    setState(() {
+                      result = 'Success';
+                    });
+                  }).catchError((onError){
+                    setState(() {
+                      result = onError.toString();
+                    });
+                  }).whenComplete(() => print('Complete'));
+              },
             ),
             const SizedBox(height: 24),
-            Text(result, style: const TextStyle(fontSize: 36)),
+            Text(result, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 16),
             const CircularProgressIndicator(),
           ],
@@ -77,4 +85,19 @@ class _FuturePageState extends State<FuturePage> {
       ),
     );
   }
+
+  Future returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Something terrible happened!');
+  }
+
+  // Future handleError() async {
+  //   try {} catch (error) {
+  //     setState(() {
+  //       result = error.toString();
+  //     });
+  //   } finally {
+  //     print('Complete');
+  //   }
+  // }
 }

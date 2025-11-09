@@ -444,8 +444,71 @@ class _FuturePageState extends State<FuturePage> {
   - Jawaban perbedaan dapat langsung dituliskan pada README di bawah ini.
     - array yang berisikan future lebih dari satu. sehingga ketika array itu dijalankan maka isi yang lebih dari satu itu berjalan bersamaan
 
+Berikut adalah format **README / Laporan Praktikum 5** lengkap dengan kode final siap copy-paste dan soal praktikum:
 
+***
 
----
+# Laporan Praktikum 5  
+## Pemrograman Asynchronous Flutter — Menangani Respon Error pada Async Code
+
+***
+
+## Kode class _FuturePageState
+
+```dart
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                returnError()
+                  .then((value){
+                    setState(() {
+                      result = 'Success';
+                    });
+                  }).catchError((onError){
+                    setState(() {
+                      result = onError.toString();
+                    });
+                  }).whenComplete(() => print('Complete'));
+              },
+            ),
+            const SizedBox(height: 24),
+            Text(result, style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
+            const CircularProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Something terrible happened!');
+  }
+```
+
+***
+
+## Soal Praktikum
+
+### Soal 9
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
+
+### Soal 10
+- Panggil method `handleError()` di `ElevatedButton`, lalu run.
+- **Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!**
+    - Langkah 1 menggunakan `.then().catchError()`
+    - Langkah 4 menggunakan `async/await` dengan blok `try-catch`
+- Tulis penjelasan langsung di README.
+
+***
 
 Reference : [codelab 11](https://jti-polinema.github.io/flutter-codelab/11-async)
