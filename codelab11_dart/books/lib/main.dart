@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Future Demo by Rizqi',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      title: 'Completer Demo',
       home: const FuturePage(),
     );
   }
@@ -25,51 +20,52 @@ class MyApp extends StatelessWidget {
 
 class FuturePage extends StatefulWidget {
   const FuturePage({super.key});
-
   @override
   State<FuturePage> createState() => _FuturePageState();
 }
 
 class _FuturePageState extends State<FuturePage> {
   String result = '';
+  late Completer completer;
+
+  Future getNumber() {
+    completer = Completer();
+    calculate();
+    return completer.future;
+  }
+
+  Future calculate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    completer.complete(42);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Back from the Future')),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Spacer(),
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                setState(() {});
-                getData()
-                    .then((value) {
-                      result = value.body.toString().substring(0, 450);
-                      setState(() {});
-                    })
-                    .catchError((_) {
-                      result = 'Error occurred';
-                      setState(() {});
-                    });
-              },
+                getNumber().then((value) {
+                  setState(() {
+                    result = value.toString();
+                  });
+                }).catchError((e) {
+                  result = 'An error occurred';
+                });
+              }
             ),
-            const Spacer(),
-            Text(result),
-            const Spacer(),
+            const SizedBox(height: 24),
+            Text(result, style: const TextStyle(fontSize: 36)),
+            const SizedBox(height: 16),
             const CircularProgressIndicator(),
-            const Spacer(),
           ],
         ),
       ),
     );
-  }
-
-  Future<Response> getData() async {
-    const authority = 'www.googleapis.com';
-    const path = '/books/v1/volumes/i9PvStUdWz8C';
-    Uri url = Uri.https(authority, path);
-    return http.get(url);
   }
 }
