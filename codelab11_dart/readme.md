@@ -329,5 +329,123 @@ Soal 6
 ![]()
 ---
 
+Berikut adalah format **README / Laporan Praktikum 4** lengkap dengan kode final siap copy-paste dan soal praktikum:
 
-Reference : [codelab 11](https://jti-polinema.github.io/flutter-codelab/11-async/#3)
+***
+
+# Laporan Praktikum 4  
+## Pemrograman Asynchronous Flutter — Memanggil Future secara Paralel
+
+***
+
+## Kode main.dart
+
+```dart
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:async/async.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'FutureGroup Demo',
+      home: const FuturePage(),
+    );
+  }
+}
+
+class FuturePage extends StatefulWidget {
+  const FuturePage({super.key});
+  @override
+  State<FuturePage> createState() => _FuturePageState();
+}
+
+class _FuturePageState extends State<FuturePage> {
+  String result = '';
+
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
+  }
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
+  void runParallel() {
+    final futureGroup = FutureGroup<int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+    futureGroup.future.then((values) {
+      final sum = values.reduce((a, b) => a + b);
+      setState(() {
+        result = sum.toString();
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                runParallel();
+              }
+            ),
+            const SizedBox(height: 24),
+            Text(result, style: const TextStyle(fontSize: 36)),
+            const SizedBox(height: 16),
+            const CircularProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+***
+
+## Soal Praktikum
+
+### Soal 7
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 7**".
+![](img/)
+
+### Soal 8
+- Jelaskan maksud perbedaan kode pada langkah FutureGroup dengan kode pada Future.wait (lihat langkah 4 di materi praktikum)!
+  - **Future.wait:**
+    ```dart
+    final futures = Future.wait([
+      returnOneAsync(),
+      returnTwoAsync(),
+      returnThreeAsync(),
+    ]);
+    ```
+  - Jawaban perbedaan dapat langsung dituliskan pada README di bawah ini.
+    - array yang berisikan future lebih dari satu. sehingga ketika array itu dijalankan maka isi yang lebih dari satu itu berjalan bersamaan
+
+
+
+---
+
+Reference : [codelab 11](https://jti-polinema.github.io/flutter-codelab/11-async)

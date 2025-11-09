@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Completer Demo',
+      title: 'FutureGroup Demo',
       home: const FuturePage(),
     );
   }
@@ -26,17 +26,32 @@ class FuturePage extends StatefulWidget {
 
 class _FuturePageState extends State<FuturePage> {
   String result = '';
-  late Completer completer;
 
-  Future getNumber() {
-    completer = Completer();
-    calculate();
-    return completer.future;
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
+  }
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
   }
 
-  Future calculate() async {
-    await Future.delayed(const Duration(seconds: 5));
-    completer.complete(42);
+  void runParallel() {
+    final futureGroup = FutureGroup<int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+    futureGroup.future.then((values) {
+      final sum = values.reduce((a, b) => a + b);
+      setState(() {
+        result = sum.toString();
+      });
+    });
   }
 
   @override
@@ -50,13 +65,7 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                getNumber().then((value) {
-                  setState(() {
-                    result = value.toString();
-                  });
-                }).catchError((e) {
-                  result = 'An error occurred';
-                });
+                runParallel();
               }
             ),
             const SizedBox(height: 24),
