@@ -6,9 +6,9 @@
 
 ### Identitas Praktikan
 
-- **Nama :** Rizqi Fauzan
-- **NIM :** 23417290143
-- **Kelas :** TI-3H
+- **Nama : ** Rizqi Fauzan
+- **NIM : ** 23417290143
+- **Kelas : ** TI-3H
 
 ---
 
@@ -135,8 +135,6 @@ Tambahkan **nama panggilan Anda** pada `title` app sebagai identitas hasil peker
 
 ## ![](img/praktikum1.gif)
 
-Berikut adalah format **README/ laporan Praktikum 2** yang berisi khusus **class \_FuturePageState** (kode final yang diminta) dan **soal praktikum** (hanya soal 4 sesuai codelab):
-
 ---
 
 # Laporan Praktikum 2
@@ -224,10 +222,6 @@ Buat function dalam class `_FuturePageState` yang sequential menggunakan async d
     });
   }
 ```
-
----
-
-Berikut adalah format **README / Laporan Praktikum 3** sesuai kode original codelab, berisi kode utama dan soal praktikumnya.
 
 ---
 
@@ -328,8 +322,6 @@ Soal 6
   Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 6".
 ![]()
 ---
-
-Berikut adalah format **README / Laporan Praktikum 4** lengkap dengan kode final siap copy-paste dan soal praktikum:
 
 ***
 
@@ -444,8 +436,6 @@ class _FuturePageState extends State<FuturePage> {
   - Jawaban perbedaan dapat langsung dituliskan pada README di bawah ini.
     - array yang berisikan future lebih dari satu. sehingga ketika array itu dijalankan maka isi yang lebih dari satu itu berjalan bersamaan
 
-Berikut adalah format **README / Laporan Praktikum 5** lengkap dengan kode final siap copy-paste dan soal praktikum:
-
 ***
 
 # Laporan Praktikum 5  
@@ -467,7 +457,7 @@ Berikut adalah format **README / Laporan Praktikum 5** lengkap dengan kode final
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                returnError()
+                handleError()
                   .then((value){
                     setState(() {
                       result = 'Success';
@@ -493,6 +483,18 @@ Berikut adalah format **README / Laporan Praktikum 5** lengkap dengan kode final
     await Future.delayed(const Duration(seconds: 2));
     throw Exception('Something terrible happened!');
   }
+
+  Future handleError() async {
+    try {
+      await returnError();
+    } catch (error) {
+      setState(() {
+        result = error.toString();
+      });
+    } finally {
+      print('Complete');
+    }
+  }
 ```
 
 ***
@@ -508,6 +510,193 @@ Berikut adalah format **README / Laporan Praktikum 5** lengkap dengan kode final
     - Langkah 1 menggunakan `.then().catchError()`
     - Langkah 4 menggunakan `async/await` dengan blok `try-catch`
 - Tulis penjelasan langsung di README.
+
+***
+
+## Persiapan Project
+
+1. **Install plugin geolocator:**
+   ```bash
+   flutter pub add geolocator
+   ```
+
+2. **Tambahkan permission GPS pada Android:**
+   Tambahkan pada `android/app/src/main/AndroidManifest.xml`:
+   ```xml
+   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+   ```
+   Untuk iOS, tambahkan di `Info.plist`:
+   ```xml
+   <key>NSLocationWhenInUseUsageDescription</key>
+   <string>This app needs to access your location</string>
+   ```
+
+***
+
+## geolocation.dart
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  String myPosition = '';
+  @override
+  void initState() {
+    super.initState();
+    getPosition().then((Position myPos) {
+      myPosition =
+        'Latitude: ${myPos.latitude.toString()} - Longitude: ${myPos.longitude.toString()}';
+      setState(() {
+        myPosition = myPosition;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Current Location')),
+      body: Center(child: Text(myPosition)),
+    );
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.requestPermission();
+    await Geolocator.isLocationServiceEnabled();
+    Position? position =
+      await Geolocator.getCurrentPosition();
+    return position;
+  }
+}
+
+```
+
+***
+
+## main.dart (memanggil LocationScreen)
+
+```dart
+import 'package:flutter/material.dart';
+import 'geolocation.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Aplikasi Lokasi - [Nama Panggilan Anda]',
+      home: const LocationScreen(),
+    );
+  }
+}
+```
+
+***
+
+## Soal Praktikum
+
+**Soal 11**
+- Tambahkan nama panggilan Anda pada setiap properti `title` aplikasi, baik di LocationScreen maupun main.dart.
+
+**Soal 12**
+- Jika animasi loading tidak tampil, tambahkan delay pada method `getPosition()`.
+```dart
+    await Future.delayed(const Duration(seconds: 3));
+```
+- Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+![](img/gps%20browser.gif)
+  - bisa dengan akurat, kebetulan laptop saya ada gpsnya ?
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Commit dengan pesan "**W11: Soal 12**".
+
+***
+
+## Kode Lengkap Praktikum 7 — geolocation.dart
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  late Future<Position> position;
+
+  Future<Position> getPosition() async {
+    await Geolocator.isLocationServiceEnabled();
+    await Future.delayed(const Duration(seconds: 3));
+    Position position = await Geolocator.getCurrentPosition();
+    return position;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    position = getPosition();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Current Location')),
+      body: Center(
+        child: FutureBuilder(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return Text(snapshot.data.toString());
+            } else {
+              return const Text('');
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+***
+
+## Soal Praktikum 7
+
+**Soal 13**  
+- Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+  - ada perbedaan animasi loading dan clean code.
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Commit dengan pesan "**W11: Soal 13**".
+
+***
+
+```dart
+else if (snapshot.connectionState == ConnectionState.done) {
+  if (snapshot.hasError) {
+    return const Text('Something terrible happened!');
+  }
+  return Text(snapshot.data.toString());
+}
+```
+
+jujur masih belum tau gunanya ini apa karena sudah ada handle await dan notif bawaan flutter yang menyuruh user menyalakan gpsnya. mungkin ini akan trigger jika device yang di run tidak memiliki gps
 
 ***
 
