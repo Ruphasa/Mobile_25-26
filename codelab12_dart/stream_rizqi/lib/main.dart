@@ -14,7 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Stream',
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
       home: const StreamHomePage(),
     );
   }
@@ -28,6 +30,9 @@ class StreamHomePage extends StatefulWidget {
 }
 
 class _StreamHomePageState extends State<StreamHomePage> {
+  Color bgColor = Colors.blueGrey;
+  late ColorStream colorStream;
+
   int lastNumber = 0;
   late StreamController numberStreamController;
   late NumberStream numberStream;
@@ -43,6 +48,8 @@ class _StreamHomePageState extends State<StreamHomePage> {
       });
     });
     super.initState();
+    colorStream = ColorStream();
+    changeColor();
   }
 
   @override
@@ -51,8 +58,13 @@ class _StreamHomePageState extends State<StreamHomePage> {
     super.dispose();
   }
 
-  Color bgColor = Colors.teal;
-  late ColorStream colorStream = ColorStream();
+  void changeColor() async {
+    await for (var eventColor in colorStream.getColors()) {
+      setState(() {
+        bgColor = eventColor;
+      });
+    }
+  }
 
   void addRandomNumber() {
     Random random = Random();
@@ -63,8 +75,13 @@ class _StreamHomePageState extends State<StreamHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stream Rizqi')),
-      body: SizedBox(
+      appBar: AppBar(
+        title: const Text('Stream'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          color: bgColor,
+        ),
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
