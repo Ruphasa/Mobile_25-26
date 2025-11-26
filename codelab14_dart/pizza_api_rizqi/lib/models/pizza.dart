@@ -6,36 +6,36 @@ const String keyPrice = 'price';
 const String keyImageUrl = 'imageUrl';
 
 class Pizza {
-  int id;
-  String pizzaName;
-  String description;
-  double price;
-  String imageUrl;
+  int? id;
+  String? pizzaName;
+  String? description;
+  double? price;
+  String? imageUrl;
 
   Pizza({
-    required this.id,
-    required this.pizzaName,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
+    this.id,
+    this.pizzaName,
+    this.description,
+    this.price,
+    this.imageUrl,
   });
 
   // Constructor fromJson menggunakan konstanta
   Pizza.fromJson(Map<String, dynamic> json)
-      : id = int.tryParse(json[keyId].toString()) ?? 0,
-        pizzaName = json[keyPizzaName]?.toString() ?? '',
-        description = json[keyDescription]?.toString() ?? '',
-        price = double.tryParse(json[keyPrice].toString()) ?? 0.0,
-        imageUrl = json[keyImageUrl]?.toString() ?? '';
+      : id = json[keyId] != null ? int.tryParse(json[keyId].toString()) : null,
+        pizzaName = json[keyPizzaName]?.toString(),
+        description = json[keyDescription]?.toString(),
+        price = json[keyPrice] != null ? double.tryParse(json[keyPrice].toString()) : null,
+        imageUrl = json[keyImageUrl]?.toString();
 
   // Method toJson menggunakan konstanta
   Map<String, dynamic> toJson() {
     return {
-      keyId: id,
-      keyPizzaName: pizzaName,
-      keyDescription: description,
-      keyPrice: price,
-      keyImageUrl: imageUrl,
+      if (id != null) keyId: id,
+      if (pizzaName != null) keyPizzaName: pizzaName,
+      if (description != null) keyDescription: description,
+      if (price != null) keyPrice: price,
+      if (imageUrl != null) keyImageUrl: imageUrl,
     };
   }
 }

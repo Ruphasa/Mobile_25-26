@@ -1,6 +1,7 @@
 # Praktikum 14 - RESTful API
 
 ## Informasi Praktikum
+
 - **Nama**: [Nama Anda]
 - **NIM**: [NIM Anda]
 - **Kelas**: [Kelas Anda]
@@ -10,15 +11,18 @@
 ## Praktikum 1: Membuat Layanan Mock API
 
 ### Tujuan
+
 Membuat aplikasi Flutter yang dapat mengambil data dari web service menggunakan HTTP GET request.
 
 ### Persiapan Mock API
 
 1. **Daftar ke Wire Mock Cloud**
+
    - Buka [https://app.wiremock.cloud/](https://app.wiremock.cloud/)
    - Buat akun dan login
 
 2. **Setup Stub untuk GET Pizza List**
+
    - Buka "Example Mock API" → Stubs
    - Klik "New" untuk membuat stub baru
    - Isi dengan data berikut:
@@ -37,12 +41,14 @@ Membuat aplikasi Flutter yang dapat mengambil data dari web service menggunakan 
 ### Langkah-langkah
 
 #### 1. Buat Project Flutter Baru
+
 ```bash
 flutter create pizza_api_rizqi
 cd pizza_api_rizqi
 ```
 
 #### 2. Tambahkan Dependensi HTTP
+
 ```bash
 flutter pub add http
 ```
@@ -50,6 +56,7 @@ flutter pub add http
 #### 3. Buat HTTP Helper
 
 **File: `lib/helper/httphelper.dart`**
+
 ```dart
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -71,7 +78,7 @@ class HttpHelper {
   Future<List<Pizza>> getPizzaList() async {
     final Uri url = Uri.https(authority, path);
     final http.Response result = await http.get(url);
-    
+
     if (result.statusCode == HttpStatus.ok) {
       final jsonResponse = json.decode(result.body);
       // Provide a type argument to the map method to avoid type error
@@ -118,6 +125,7 @@ class HttpHelper {
 #### 5. Edit Main.dart
 
 **File: `lib/main.dart`**
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -135,7 +143,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter JSON Rizqi', // Ganti dengan nama Anda
+      title: 'Flutter JSON Rizqi',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.teal,
@@ -198,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 
 ### Soal 1
+
 ✅ Nama panggilan ditambahkan pada `title` app
 ✅ Warna tema aplikasi disesuaikan
 
@@ -212,6 +221,7 @@ Singleton pattern memastikan bahwa hanya ada satu instance dari `HttpHelper` di 
 ## Praktikum 2: Mengirim Data ke Web Service (POST)
 
 ### Tujuan
+
 Mengirim data baru ke web service menggunakan HTTP POST request.
 
 ### Persiapan Mock API
@@ -229,22 +239,15 @@ Mengirim data baru ke web service menggunakan HTTP POST request.
 
 ### File yang Dibuat
 
-**File: `lib/pizza_detail.dart`** (FINAL)
+**File: `lib/pizza_detail.dart`**
+
 ```dart
 import 'package:flutter/material.dart';
-import 'pizza.dart';
-import 'httphelper.dart';
+import 'package:pizza_api_rizqi/models/pizza.dart';
+import 'package:pizza_api_rizqi/helper/httphelper.dart';
 
 class PizzaDetailScreen extends StatefulWidget {
-  final Pizza pizza;
-  final bool isNew;
-
-  const PizzaDetailScreen({
-    super.key,
-    required this.pizza,
-    required this.isNew,
-  });
-
+  const PizzaDetailScreen({super.key});
   @override
   State<PizzaDetailScreen> createState() => _PizzaDetailScreenState();
 }
@@ -258,18 +261,6 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
   String operationResult = '';
 
   @override
-  void initState() {
-    if (!widget.isNew) {
-      txtId.text = widget.pizza.id.toString();
-      txtName.text = widget.pizza.pizzaName ?? '';
-      txtDescription.text = widget.pizza.description ?? '';
-      txtPrice.text = widget.pizza.price.toString();
-      txtImageUrl.text = widget.pizza.imageUrl ?? '';
-    }
-    super.initState();
-  }
-
-  @override
   void dispose() {
     txtId.dispose();
     txtName.dispose();
@@ -279,31 +270,10 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
     super.dispose();
   }
 
-  Future savePizza() async {
-    HttpHelper helper = HttpHelper();
-    Pizza pizza = Pizza(
-      id: int.tryParse(txtId.text),
-      pizzaName: txtName.text,
-      description: txtDescription.text,
-      price: double.tryParse(txtPrice.text),
-      imageUrl: txtImageUrl.text,
-    );
-
-    final result = await (widget.isNew
-        ? helper.postPizza(pizza)
-        : helper.putPizza(pizza));
-    
-    setState(() {
-      operationResult = result;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pizza Detail'),
-      ),
+      appBar: AppBar(title: const Text('Pizza Detail')),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: SingleChildScrollView(
@@ -324,12 +294,16 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
               const SizedBox(height: 24),
               TextField(
                 controller: txtName,
-                decoration: const InputDecoration(hintText: 'Insert Pizza Name'),
+                decoration: const InputDecoration(
+                  hintText: 'Insert Pizza Name',
+                ),
               ),
               const SizedBox(height: 24),
               TextField(
                 controller: txtDescription,
-                decoration: const InputDecoration(hintText: 'Insert Description'),
+                decoration: const InputDecoration(
+                  hintText: 'Insert Description',
+                ),
               ),
               const SizedBox(height: 24),
               TextField(
@@ -345,7 +319,7 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
               ElevatedButton(
                 child: const Text('Send Post'),
                 onPressed: () {
-                  savePizza();
+                  postPizza();
                 },
               ),
             ],
@@ -354,20 +328,52 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
       ),
     );
   }
+
+  Future postPizza() async {
+    HttpHelper helper = HttpHelper();
+    Pizza pizza = Pizza();
+    pizza.id = int.tryParse(txtId.text);
+    pizza.pizzaName = txtName.text;
+    pizza.description = txtDescription.text;
+    pizza.price = double.tryParse(txtPrice.text);
+    pizza.imageUrl = txtImageUrl.text;
+    String result = await helper.postPizza(pizza);
+    setState(() {
+      operationResult = result;
+    });
+  }
 }
+
+```
+
+**File: `lib/main.dart`**
+
+```dart
+floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PizzaDetailScreen()),
+          );
+        },
+      ),
 ```
 
 ### Penjelasan
+
 - **POST** digunakan untuk mengirim data baru ke server
 - Method `postPizza()` mengubah objek Pizza menjadi JSON menggunakan `json.encode()`
 - `FloatingActionButton` di halaman utama untuk navigasi ke form input pizza baru
 - `TextEditingController` digunakan untuk mengambil input dari user
 
 ### Soal 2
+
 Screenshot/GIF aplikasi POST pizza:
 [Masukkan screenshot/GIF di sini]
 
 **Field tambahan yang bisa ditambahkan:**
+
 - `category` (String): Kategori pizza (e.g., "Vegetarian", "Meat Lovers")
 - `rating` (double): Rating pizza (0.0 - 5.0)
 - `available` (bool): Ketersediaan pizza
@@ -377,6 +383,7 @@ Screenshot/GIF aplikasi POST pizza:
 ## Praktikum 3: Memperbarui Data di Web Service (PUT)
 
 ### Tujuan
+
 Memperbarui data yang sudah ada di web service menggunakan HTTP PUT request.
 
 ### Persiapan Mock API
@@ -399,11 +406,13 @@ Semua perubahan sudah terintegrasi dalam file `pizza_detail.dart` dan `main.dart
 **Poin Penting:**
 
 1. **Di `pizza_detail.dart`:**
+
    - Constructor menerima parameter `pizza` dan `isNew`
    - Method `initState()` mengisi TextField jika `isNew = false`
    - Method `savePizza()` menggunakan conditional untuk POST atau PUT
 
 2. **Di `main.dart`:**
+
    - `onTap` pada ListTile navigasi ke PizzaDetailScreen dengan `isNew: false`
    - FloatingActionButton navigasi ke PizzaDetailScreen dengan `isNew: true`
 
@@ -411,6 +420,7 @@ Semua perubahan sudah terintegrasi dalam file `pizza_detail.dart` dan `main.dart
    - Method `putPizza()` sudah ditambahkan (lihat kode lengkap di Praktikum 1)
 
 ### Cara Kerja
+
 - Ketika user tap pada ListTile pizza yang sudah ada, aplikasi akan:
   1. Navigasi ke PizzaDetailScreen
   2. Mengisi form dengan data pizza yang dipilih
@@ -418,10 +428,12 @@ Semua perubahan sudah terintegrasi dalam file `pizza_detail.dart` dan `main.dart
   4. Ketika klik "Send Post", akan memanggil `putPizza()` karena `isNew = false`
 
 ### Soal 3
+
 Screenshot/GIF aplikasi UPDATE pizza dengan Nama dan NIM:
 [Masukkan screenshot/GIF di sini]
 
 **Contoh data yang diupdate:**
+
 ```
 ID: 1
 Pizza Name: Margherita - [Nama Anda]
@@ -435,6 +447,7 @@ Image URL: images/margherita.png
 ## Praktikum 4: Menghapus Data dari Web Service (DELETE)
 
 ### Tujuan
+
 Menghapus data dari web service menggunakan HTTP DELETE request dengan gesture swipe.
 
 ### Persiapan Mock API
@@ -457,6 +470,7 @@ Semua perubahan sudah terintegrasi dalam `main.dart` (lihat kode lengkap di Prak
 **Poin Penting:**
 
 1. **Widget Dismissible:**
+
    ```dart
    Dismissible(
      key: Key(position.toString()),
@@ -475,6 +489,7 @@ Semua perubahan sudah terintegrasi dalam `main.dart` (lihat kode lengkap di Prak
    - Menerima parameter `id` untuk menentukan pizza yang akan dihapus
 
 ### Cara Kerja
+
 - User swipe (geser) ListTile ke kiri atau kanan
 - Widget `Dismissible` akan mendeteksi gesture
 - Callback `onDismissed` akan:
@@ -483,6 +498,7 @@ Semua perubahan sudah terintegrasi dalam `main.dart` (lihat kode lengkap di Prak
 - ListTile akan hilang dari tampilan dengan animasi
 
 ### Soal 4
+
 Screenshot/GIF aplikasi DELETE pizza (swipe gesture):
 [Masukkan screenshot/GIF di sini]
 
@@ -490,16 +506,17 @@ Screenshot/GIF aplikasi DELETE pizza (swipe gesture):
 
 ## Ringkasan CRUD Operations
 
-| Operation | HTTP Verb | Fungsi | Method |
-|-----------|-----------|--------|--------|
-| **Create** | POST | Menambah data baru | `postPizza()` |
-| **Read** | GET | Mengambil data | `getPizzaList()` |
-| **Update** | PUT | Memperbarui data | `putPizza()` |
-| **Delete** | DELETE | Menghapus data | `deletePizza()` |
+| Operation  | HTTP Verb | Fungsi             | Method           |
+| ---------- | --------- | ------------------ | ---------------- |
+| **Create** | POST      | Menambah data baru | `postPizza()`    |
+| **Read**   | GET       | Mengambil data     | `getPizzaList()` |
+| **Update** | PUT       | Memperbarui data   | `putPizza()`     |
+| **Delete** | DELETE    | Menghapus data     | `deletePizza()`  |
 
 ## Catatan Penting
 
 ### 1. Singleton Pattern di HttpHelper
+
 ```dart
 static final HttpHelper _httpHelper = HttpHelper._internal();
 HttpHelper._internal();
@@ -507,11 +524,13 @@ factory HttpHelper() {
   return _httpHelper;
 }
 ```
+
 - Memastikan hanya ada satu instance HttpHelper
 - Menghemat resource dan memory
 - Mudah diakses dari berbagai bagian aplikasi
 
 ### 2. FutureBuilder
+
 ```dart
 FutureBuilder(
   future: callPizzas(),
@@ -522,11 +541,13 @@ FutureBuilder(
   },
 )
 ```
+
 - Menangani operasi asynchronous
 - Menampilkan loading indicator saat data belum tersedia
 - Error handling yang baik
 
 ### 3. Dismissible Widget
+
 - Memberikan interaksi swipe-to-delete
 - Animasi built-in yang smooth
 - Callback `onDismissed` untuk aksi setelah swipe
@@ -534,7 +555,9 @@ FutureBuilder(
 ## Troubleshooting
 
 ### Error: "type 'List<dynamic>' is not a subtype of type 'List<Pizza>'"
+
 **Solusi:** Gunakan type argument di method `map()`:
+
 ```dart
 List<Pizza> pizzas = jsonResponse
     .map<Pizza>((i) => Pizza.fromJson(i))
@@ -542,17 +565,22 @@ List<Pizza> pizzas = jsonResponse
 ```
 
 ### Error: "Could not connect to server"
-**Solusi:** 
+
+**Solusi:**
+
 - Pastikan URL Mock API sudah benar
 - Cek koneksi internet
 - Pastikan stub sudah dibuat di Wire Mock Cloud
 
 ### Error: "Null check operator used on a null value"
+
 **Solusi:**
+
 - Gunakan null-safe operator (`?`, `??`, `!`)
 - Pastikan semua field nullable di model Pizza
 
 ## Referensi
+
 - Flutter HTTP Package: https://pub.dev/packages/http
 - Wire Mock Cloud: https://www.wiremock.io/
 - RESTful API Guide: https://restfulapi.net/

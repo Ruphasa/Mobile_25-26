@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'helper/httphelper.dart';
 import 'models/pizza.dart';
+import 'pages/pizza_detail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter JSON Rizqi', // Ganti dengan nama Anda
+      title: 'Flutter JSON Rizqi',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.teal,
@@ -46,6 +45,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PizzaDetailScreen()),
+          );
+        },
+      ),
       appBar: AppBar(title: const Text('JSON')),
       body: FutureBuilder(
         future: callPizzas(),
@@ -60,11 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
             itemBuilder: (BuildContext context, int position) {
               return ListTile(
-                title: Text(snapshot.data![position].pizzaName),
+                title: Text(snapshot!.data![position].pizzaName ?? ''),
                 subtitle: Text(
-                  snapshot.data![position].description +
+                  (snapshot.data![position].description ?? '') +
                       ' - € ' +
-                      snapshot.data![position].price.toString(),
+                      (snapshot.data![position].price?.toString() ?? ''),
                 ),
               );
             },

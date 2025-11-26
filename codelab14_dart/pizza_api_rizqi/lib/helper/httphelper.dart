@@ -32,22 +32,24 @@ class HttpHelper {
   }
 
   Future<String> postPizza(Pizza pizza) async {
-    const postPath = '/pizzalist';
+    const postPath = '/pizza';
     String post = json.encode(pizza.toJson());
     Uri url = Uri.https(authority, postPath);
     http.Response r = await http.post(
       url,
+      headers: {'Content-Type': 'application/json'},
       body: post,
     );
     return r.body;
   }
 
   Future<String> putPizza(Pizza pizza) async {
-    const putPath = '/pizzalist';
+    const putPath = '/pizza';
     String put = json.encode(pizza.toJson());
     Uri url = Uri.https(authority, putPath);
     http.Response r = await http.put(
       url,
+      headers: {'Content-Type': 'application/json'},
       body: put,
     );
     return r.body;
@@ -55,7 +57,7 @@ class HttpHelper {
 
   Future<String> deletePizza(int id) async {
     const deletePath = '/pizzalist';
-    Uri url = Uri.https(authority, deletePath);
+    Uri url = Uri.https(authority, '$deletePath/$id');
     http.Response r = await http.delete(url);
     return r.body;
   }
