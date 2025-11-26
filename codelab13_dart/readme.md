@@ -822,12 +822,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Pizza> myPizzas = [];
-  int appCounter = 0;
-  String documentsPath = '';
-  String tempPath = '';
-  late File myFile;
-  String fileText = '';
   
   // Secure Storage variables
   final pwdController = TextEditingController();
@@ -842,36 +836,6 @@ class _MyHomePageState extends State<MyHomePage> {
       myFile = File('$documentsPath/pizzas.txt');
       writeFile();
     });
-  }
-
-  Future<void> getPaths() async {
-    final docDir = await getApplicationDocumentsDirectory();
-    final tempDir = await getTemporaryDirectory();
-    setState(() {
-      documentsPath = docDir.path;
-      tempPath = tempDir.path;
-    });
-  }
-
-  Future<bool> writeFile() async {
-    try {
-      await myFile.writeAsString('Margherita, Capricciosa, Napoli');
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> readFile() async {
-    try {
-      String fileContent = await myFile.readAsString();
-      setState(() {
-        fileText = fileContent;
-      });
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 
   Future<void> writeToSecureStorage() async {
@@ -898,37 +862,6 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Documents Path:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                documentsPath,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Temp Path:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                tempPath,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  readFile();
-                },
-                child: const Text('Read File'),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                fileText,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
               const SizedBox(height: 32),
               const Divider(),
               const SizedBox(height: 16),
