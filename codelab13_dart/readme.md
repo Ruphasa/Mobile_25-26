@@ -208,8 +208,15 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 
 ### Soal 1
-✅ Nama panggilan ditambahkan pada `title` app
-✅ Warna tema aplikasi disesuaikan
+- Nama panggilan ditambahkan pada `title` app
+- Warna tema aplikasi disesuaikan
+```dart
+  title: 'Flutter Demo Rizqi', // Ganti dengan nama Anda
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal), // Ganti warna sesuai selera
+      useMaterial3: true,
+    ),
+```
 
 ### Soal 2
 Screenshot aplikasi menampilkan list pizza:
@@ -228,7 +235,7 @@ Menangani data JSON yang tidak konsisten atau "rusak" dengan menggunakan type ca
 
 ### File yang Dimodifikasi
 
-**File: `lib/models/pizza.dart`** (FINAL)
+**File: `lib/models/pizza.dart`**
 ```dart
 class Pizza {
   int id;
