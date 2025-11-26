@@ -38,8 +38,8 @@ Membuat aplikasi Flutter yang dapat mengambil data dari web service menggunakan 
 
 #### 1. Buat Project Flutter Baru
 ```bash
-flutter create pizza_api_[nama_anda]
-cd pizza_api_[nama_anda]
+flutter create pizza_api_rizqi
+cd pizza_api_rizqi
 ```
 
 #### 2. Tambahkan Dependensi HTTP
@@ -47,49 +47,9 @@ cd pizza_api_[nama_anda]
 flutter pub add http
 ```
 
-#### 3. Buat Model Pizza
+#### 3. Buat HTTP Helper
 
-**File: `lib/pizza.dart`**
-```dart
-class Pizza {
-  int? id;
-  String? pizzaName;
-  String? description;
-  double? price;
-  String? imageUrl;
-
-  Pizza({
-    this.id,
-    this.pizzaName,
-    this.description,
-    this.price,
-    this.imageUrl,
-  });
-
-  // Constructor fromJson untuk deserialization
-  Pizza.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        pizzaName = json['pizzaName'],
-        description = json['description'],
-        price = json['price'],
-        imageUrl = json['imageUrl'];
-
-  // Method toJson untuk serialization
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'pizzaName': pizzaName,
-      'description': description,
-      'price': price,
-      'imageUrl': imageUrl,
-    };
-  }
-}
-```
-
-#### 4. Buat HTTP Helper
-
-**File: `lib/httphelper.dart`**
+**File: `lib/helper/httphelper.dart`**
 ```dart
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -160,9 +120,10 @@ class HttpHelper {
 **File: `lib/main.dart`**
 ```dart
 import 'package:flutter/material.dart';
-import 'httphelper.dart';
-import 'pizza.dart';
-import 'pizza_detail.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'helper/httphelper.dart';
+import 'models/pizza.dart';
 
 void main() {
   runApp(const MyApp());
@@ -174,9 +135,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter JSON [Nama Anda]', // Ganti dengan nama Anda
+      title: 'Flutter JSON Rizqi', // Ganti dengan nama Anda
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple), // Ganti sesuai selera
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+        ), // Ganti sesuai selera
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'JSON'),
@@ -193,6 +156,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Pizza> myPizzas = [];
+
   Future<List<Pizza>> callPizzas() async {
     HttpHelper helper = HttpHelper();
     List<Pizza> pizzas = await helper.getPizzaList();
@@ -202,62 +167,28 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: const Text('JSON')),
       body: FutureBuilder(
         future: callPizzas(),
-        builder: (BuildContext context, AsyncSnapshot<List<Pizza>> pizzas) {
-          if (pizzas.hasError) {
+        builder: (BuildContext context, AsyncSnapshot<List<Pizza>> snapshot) {
+          if (snapshot.hasError) {
             return const Text('Something went wrong');
           }
-          if (!pizzas.hasData) {
+          if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           }
           return ListView.builder(
-            itemCount: (pizzas.data == null) ? 0 : pizzas.data!.length,
+            itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
             itemBuilder: (BuildContext context, int position) {
-              return Dismissible(
-                key: Key(position.toString()),
-                onDismissed: (direction) {
-                  HttpHelper helper = HttpHelper();
-                  pizzas.data!.removeWhere(
-                      (element) => element.id == pizzas.data![position].id);
-                  helper.deletePizza(pizzas.data![position].id!);
-                },
-                child: ListTile(
-                  title: Text(pizzas.data![position].pizzaName ?? ''),
-                  subtitle: Text(
-                    '${pizzas.data![position].description ?? ''} - € ${pizzas.data![position].price?.toString() ?? '0'}',
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PizzaDetailScreen(
-                          pizza: pizzas.data![position],
-                          isNew: false,
-                        ),
-                      ),
-                    );
-                  },
+              return ListTile(
+                title: Text(snapshot.data![position].pizzaName),
+                subtitle: Text(
+                  snapshot.data![position].description +
+                      ' - € ' +
+                      snapshot.data![position].price.toString(),
                 ),
               );
             },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PizzaDetailScreen(
-                pizza: Pizza(),
-                isNew: true,
-              ),
-            ),
           );
         },
       ),
