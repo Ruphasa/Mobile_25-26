@@ -385,14 +385,11 @@ Menyimpan data sederhana (seperti counter) menggunakan SharedPreferences.
 flutter pub add shared_preferences
 ```
 
-#### 2. File Main.dart (FINAL untuk Praktikum 4)
+#### 2. File Main.dart
 
 **File: `lib/main.dart`**
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'models/pizza.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -424,38 +421,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Pizza> myPizzas = [];
   int appCounter = 0;
 
   @override
   void initState() {
     super.initState();
-    readJsonFile().then((value) {
-      setState(() {
-        myPizzas = value;
-      });
-    });
     readAndWritePreference();
-  }
-
-  Future<List<Pizza>> readJsonFile() async {
-    final String myString = await rootBundle.loadString('assets/pizzalist.json');
-    List pizzaMapList = jsonDecode(myString);
-    
-    List<Pizza> myPizzas = [];
-    for (var pizza in pizzaMapList) {
-      Pizza myPizza = Pizza.fromJson(pizza);
-      myPizzas.add(myPizza);
-    }
-    
-    String json = convertToJSON(myPizzas);
-    print(json);
-    
-    return myPizzas;
-  }
-
-  String convertToJSON(List<Pizza> pizzas) {
-    return jsonEncode(pizzas.map((pizza) => pizza.toJson()).toList());
   }
 
   Future<void> readAndWritePreference() async {
@@ -524,7 +495,7 @@ Mengakses direktori aplikasi menggunakan package `path_provider`.
 flutter pub add path_provider
 ```
 
-#### 2. File Main.dart (FINAL untuk Praktikum 5)
+#### 2. File Main.dart
 
 **File: `lib/main.dart`**
 ```dart
