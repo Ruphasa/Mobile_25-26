@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo Rizqi', // Ganti dengan nama Anda
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal), // Ganti warna sesuai selera
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+        ), // Ganti warna sesuai selera
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -45,19 +47,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List<Pizza>> readJsonFile() async {
-    final String myString = await rootBundle.loadString('assets/pizzalist.json');
+    final String myString = await rootBundle.loadString(
+      'assets/pizzalist.json',
+    );
     List pizzaMapList = jsonDecode(myString);
-    
+
     List<Pizza> myPizzas = [];
     for (var pizza in pizzaMapList) {
       Pizza myPizza = Pizza.fromJson(pizza);
       myPizzas.add(myPizza);
     }
-    
+
     // Konversi kembali ke JSON untuk testing
     String json = convertToJSON(myPizzas);
     print(json);
-    
+
     return myPizzas;
   }
 
@@ -75,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView.builder(
         itemCount: myPizzas.length,
         itemBuilder: (context, index) {
-          final pizza = myPizzas[index];
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             elevation: 4,
@@ -93,14 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.grey[200],
-                      image: pizza.imageUrl.isNotEmpty
+                      image: myPizzas[index].imageUrl.isNotEmpty
                           ? DecorationImage(
-                              image: NetworkImage(pizza.imageUrl),
+                              image: NetworkImage(myPizzas[index].imageUrl),
                               fit: BoxFit.cover,
                             )
                           : null,
                     ),
-                    child: pizza.imageUrl.isEmpty
+                    child: myPizzas[index].imageUrl.isEmpty
                         ? const Icon(
                             Icons.local_pizza,
                             size: 40,
@@ -116,7 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         // Nama pizza
                         Text(
-                          pizza.pizzaName,
+                          myPizzas[index].pizzaName.isNotEmpty
+                              ? myPizzas[index].pizzaName
+                              : 'Unnamed Pizza',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -126,7 +131,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         const SizedBox(height: 4),
                         // Deskripsi pizza
                         Text(
-                          pizza.description,
+                          myPizzas[index].description.isNotEmpty
+                              ? myPizzas[index].description
+                              : 'No description available.',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -139,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Row(
                           children: [
                             Text(
-                              '€${pizza.price.toStringAsFixed(2)}',
+                              '€${myPizzas[index].price.toStringAsFixed(2).isNotEmpty ? myPizzas[index].price.toStringAsFixed(2) : '0.00'}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -149,7 +156,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             const Spacer(),
                             // Rating atau badge (opsional)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.orange[100],
                                 borderRadius: BorderRadius.circular(12),

@@ -13,13 +13,13 @@ class Pizza {
     required this.imageUrl,
   });
 
-  // Constructor fromJson untuk deserialization
+  // Constructor fromJson dengan error handling
   Pizza.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        pizzaName = json['pizzaName'],
-        description = json['description'],
-        price = json['price'],
-        imageUrl = json['imageUrl'];
+      : id = int.tryParse(json['id'].toString()) ?? 0,
+        pizzaName = json['pizzaName']?.toString() ?? '',
+        description = json['description']?.toString() ?? '',
+        price = double.tryParse(json['price'].toString()) ?? 0.0,
+        imageUrl = json['imageUrl']?.toString() ?? '';
 
   // Method toJson untuk serialization
   Map<String, dynamic> toJson() {
