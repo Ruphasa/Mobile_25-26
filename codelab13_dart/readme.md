@@ -607,11 +607,7 @@ Membaca dan menulis file menggunakan library `dart:io`.
 **File: `lib/main.dart`**
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'dart:io';
-import 'models/pizza.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
@@ -643,8 +639,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Pizza> myPizzas = [];
-  int appCounter = 0;
   String documentsPath = '';
   String tempPath = '';
   late File myFile;
@@ -671,7 +665,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<bool> writeFile() async {
     try {
       // Ganti dengan Nama Lengkap dan NIM Anda
-      await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+      await myFile.writeAsString('Rizqi, Fauzan, 2341720143');
       return true;
     } catch (e) {
       return false;
