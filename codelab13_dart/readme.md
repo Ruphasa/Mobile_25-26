@@ -220,11 +220,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### Soal 2
 Screenshot aplikasi menampilkan list pizza:
-[Masukkan screenshot di sini]
+![](img/soal2.jpg)
 
 ### Soal 3
 Screenshot aplikasi menampilkan list pizza dengan struktur lebih baik:
-[Masukkan screenshot di sini]
+![](img/soal3.jpg)
 
 ---
 
@@ -299,8 +299,7 @@ body: ListView.builder(
 
 ### Soal 4
 Screenshot aplikasi menangani data yang tidak konsisten:
-[Masukkan screenshot di sini]
-
+![](img/soal4.jpg)
 ---
 
 ## Praktikum 3: Menangani Error JSON
@@ -369,7 +368,8 @@ Menggunakan konstanta untuk kunci JSON membuat kode lebih aman dan mudah dirawat
 4. **Single Source of Truth**: Semua referensi ke kunci JSON menggunakan konstanta yang sama, menghindari inkonsistensi.
 
 Screenshot:
-[Masukkan screenshot di sini]
+![](img/soal5.jpg)
+tidak ada perubahan di UI
 
 ---
 
@@ -479,7 +479,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### Soal 6
 Screenshot/GIF aplikasi dengan counter SharedPreferences:
-[Masukkan screenshot/GIF di sini]
+![](img/soal6.gif)
 
 ---
 
@@ -593,8 +593,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### Soal 7
 Screenshot aplikasi menampilkan path dokumen dan temp:
-[Masukkan screenshot di sini]
-
+![](img/soal7.jpg)
 ---
 
 ## Praktikum 6: Akses Filesystem dengan Direktori
@@ -743,14 +742,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
 **Langkah 3 - Method `writeFile()`:**
 ```dart
-Future<bool> writeFile() async {
-  try {
-    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
-    return true;
-  } catch (e) {
-    return false;
+  Future<bool> writeFile() async {
+    try {
+      // Ganti dengan Nama Lengkap dan NIM Anda
+      await myFile.writeAsString('Rizqi, Fauzan, 2341720143');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
-}
 ```
 - Method ini menulis string ke file `pizzas.txt` di direktori dokumen aplikasi
 - Menggunakan `try-catch` untuk menangani error jika terjadi masalah saat menulis
@@ -764,8 +764,7 @@ Future<bool> writeFile() async {
 - Menggunakan `setState()` agar UI ter-update dengan konten yang dibaca
 
 Screenshot/GIF:
-[Masukkan screenshot/GIF di sini]
-
+![](img/soal8.gif)
 ---
 
 ## Praktikum 7: Menyimpan Data dengan Enkripsi/Dekripsi
@@ -907,6 +906,5 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### Soal 9
 Screenshot/GIF aplikasi dengan Secure Storage (Save & Read password):
-[Masukkan screenshot/GIF di sini]
-
+![](img/soal9.gif)
 ---
