@@ -500,10 +500,6 @@ flutter pub add path_provider
 **File: `lib/main.dart`**
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'models/pizza.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
@@ -516,7 +512,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo [Nama Anda]',
+      title: 'Flutter Demo Rizqi',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -535,8 +531,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Pizza> myPizzas = [];
-  int appCounter = 0;
   String documentsPath = '';
   String tempPath = '';
 
