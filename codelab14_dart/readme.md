@@ -2,9 +2,9 @@
 
 ## Informasi Praktikum
 
-- **Nama**: [Nama Anda]
-- **NIM**: [NIM Anda]
-- **Kelas**: [Kelas Anda]
+- **Nama**: Rizqi Fauzan
+- **NIM**: 2341720143
+- **Kelas**: TI-3H
 
 ---
 
