@@ -50,7 +50,10 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PizzaDetailScreen()),
+            MaterialPageRoute(builder: (context) => PizzaDetailScreen(
+              pizza: Pizza(),
+              isNew: true,
+            )),
           );
         },
       ),
@@ -74,6 +77,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       ' - € ' +
                       (snapshot.data![position].price?.toString() ?? ''),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PizzaDetailScreen(
+                      pizza: snapshot.data![position],
+                      isNew: false,
+                    )),
+                  );
+                },
               );
             },
           );
