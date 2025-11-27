@@ -211,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ✅ Warna tema aplikasi disesuaikan
 
 Screenshot hasil aplikasi:
-[Masukkan screenshot di sini]
+![](img/praktikum%201.gif)
 
 **Penjelasan Singleton Pattern:**
 Singleton pattern memastikan bahwa hanya ada satu instance dari `HttpHelper` di seluruh aplikasi. Ini menghemat resource dan menghindari pembuatan objek yang berulang-ulang.
@@ -370,7 +370,7 @@ floatingActionButton: FloatingActionButton(
 ### Soal 2
 
 Screenshot/GIF aplikasi POST pizza:
-[Masukkan screenshot/GIF di sini]
+![](img/praktikum%202.gif)
 
 **Field tambahan yang bisa ditambahkan:**
 
@@ -411,6 +411,24 @@ Semua perubahan sudah terintegrasi dalam file `pizza_detail.dart` dan `main.dart
    - Method `initState()` mengisi TextField jika `isNew = false`
    - Method `savePizza()` menggunakan conditional untuk POST atau PUT
 
+   ```dart
+   Future savePizza() async {
+    HttpHelper helper = HttpHelper();
+    Pizza pizza = Pizza();
+    pizza.id = int.tryParse(txtId.text);
+    pizza.pizzaName = txtName.text;
+    pizza.description = txtDescription.text;
+    pizza.price = double.tryParse(txtPrice.text);
+    pizza.imageUrl = txtImageUrl.text;
+    final result = await (widget.isNew
+        ? helper.postPizza(pizza)
+        : helper.putPizza(pizza));
+    setState(() {
+      operationResult = result;
+    });
+   }
+   ```
+
 2. **Di `main.dart`:**
 
    - `onTap` pada ListTile navigasi ke PizzaDetailScreen dengan `isNew: false`
@@ -430,7 +448,7 @@ Semua perubahan sudah terintegrasi dalam file `pizza_detail.dart` dan `main.dart
 ### Soal 3
 
 Screenshot/GIF aplikasi UPDATE pizza dengan Nama dan NIM:
-[Masukkan screenshot/GIF di sini]
+![](img/praktikum%203.gif)
 
 **Contoh data yang diupdate:**
 
@@ -480,7 +498,9 @@ Semua perubahan sudah terintegrasi dalam `main.dart` (lihat kode lengkap di Prak
            (element) => element.id == pizzas.data![position].id);
        helper.deletePizza(pizzas.data![position].id!);
      },
-     child: ListTile(...),
+     child: ListTile(
+      ...
+      ),
    )
    ```
 
@@ -500,8 +520,7 @@ Semua perubahan sudah terintegrasi dalam `main.dart` (lihat kode lengkap di Prak
 ### Soal 4
 
 Screenshot/GIF aplikasi DELETE pizza (swipe gesture):
-[Masukkan screenshot/GIF di sini]
-
+![](img/praktikum%204.gif)
 ---
 
 ## Ringkasan CRUD Operations
@@ -537,7 +556,9 @@ FutureBuilder(
   builder: (context, snapshot) {
     if (snapshot.hasError) return Text('Error');
     if (!snapshot.hasData) return CircularProgressIndicator();
-    return ListView.builder(...);
+    return ListView.builder(
+      ...
+    );
   },
 )
 ```
@@ -551,49 +572,3 @@ FutureBuilder(
 - Memberikan interaksi swipe-to-delete
 - Animasi built-in yang smooth
 - Callback `onDismissed` untuk aksi setelah swipe
-
-## Troubleshooting
-
-### Error: "type 'List<dynamic>' is not a subtype of type 'List<Pizza>'"
-
-**Solusi:** Gunakan type argument di method `map()`:
-
-```dart
-List<Pizza> pizzas = jsonResponse
-    .map<Pizza>((i) => Pizza.fromJson(i))
-    .toList();
-```
-
-### Error: "Could not connect to server"
-
-**Solusi:**
-
-- Pastikan URL Mock API sudah benar
-- Cek koneksi internet
-- Pastikan stub sudah dibuat di Wire Mock Cloud
-
-### Error: "Null check operator used on a null value"
-
-**Solusi:**
-
-- Gunakan null-safe operator (`?`, `??`, `!`)
-- Pastikan semua field nullable di model Pizza
-
-## Referensi
-
-- Flutter HTTP Package: https://pub.dev/packages/http
-- Wire Mock Cloud: https://www.wiremock.io/
-- RESTful API Guide: https://restfulapi.net/
-- Flutter Cookbook: https://docs.flutter.dev/cookbook
-
----
-
-## Testing Checklist
-
-- [ ] GET: Aplikasi berhasil menampilkan list pizza
-- [ ] POST: Berhasil menambah pizza baru
-- [ ] PUT: Berhasil mengupdate data pizza
-- [ ] DELETE: Berhasil menghapus pizza dengan swipe
-- [ ] Error handling berfungsi dengan baik
-- [ ] Loading indicator muncul saat fetch data
-- [ ] UI responsive dan user-friendly

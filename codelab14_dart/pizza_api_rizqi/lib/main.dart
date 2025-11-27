@@ -35,6 +35,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Pizza> myPizzas = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadPizzas();
+  }
+
+  Future<void> loadPizzas() async {
+    setState(() {
+      isLoading = true;
+    });
+    HttpHelper helper = HttpHelper();
+    List<Pizza> pizzas = await helper.getPizzaList();
+    setState(() {
+      myPizzas = pizzas;
+      isLoading = false;
+    });
+  }
 
   Future<List<Pizza>> callPizzas() async {
     HttpHelper helper = HttpHelper();
@@ -50,47 +69,52 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PizzaDetailScreen(
-              pizza: Pizza(),
-              isNew: true,
-            )),
+            MaterialPageRoute(
+              builder: (context) =>
+                  PizzaDetailScreen(pizza: Pizza(), isNew: true, onSave: loadPizzas),
+            ),
           );
         },
       ),
       appBar: AppBar(title: const Text('JSON')),
-      body: FutureBuilder(
-        future: callPizzas(),
-        builder: (BuildContext context, AsyncSnapshot<List<Pizza>> snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
-          return ListView.builder(
-            itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
-            itemBuilder: (BuildContext context, int position) {
-              return ListTile(
-                title: Text(snapshot!.data![position].pizzaName ?? ''),
-                subtitle: Text(
-                  (snapshot.data![position].description ?? '') +
-                      ' - € ' +
-                      (snapshot.data![position].price?.toString() ?? ''),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PizzaDetailScreen(
-                      pizza: snapshot.data![position],
-                      isNew: false,
-                    )),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
+      body: isLoading
+          ? const CircularProgressIndicator()
+          : ListView.builder(
+              itemCount: myPizzas.length,
+              itemBuilder: (BuildContext context, int position) {
+                return Dismissible(
+                  key: Key(myPizzas[position].id.toString()),
+                  onDismissed: (item) async {
+                    int pizzaId = myPizzas[position].id!;
+                    setState(() {
+                      myPizzas.removeAt(position);
+                    });
+                    HttpHelper helper = HttpHelper();
+                    await helper.deletePizza(pizzaId);
+                  },
+                  child: ListTile(
+                    title: Text(myPizzas[position].pizzaName ?? ''),
+                    subtitle: Text(
+                      (myPizzas[position].description ?? '') +
+                          ' - € ' +
+                          (myPizzas[position].price?.toString() ?? ''),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PizzaDetailScreen(
+                            pizza: myPizzas[position],
+                            isNew: false,
+                            onSave: loadPizzas,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
     );
   }
 }

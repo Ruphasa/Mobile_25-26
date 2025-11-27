@@ -5,10 +5,12 @@ import 'package:pizza_api_rizqi/helper/httphelper.dart';
 class PizzaDetailScreen extends StatefulWidget {
   final Pizza pizza;
   final bool isNew;
+  final VoidCallback? onSave; //save perubahan ke list
   const PizzaDetailScreen({
     super.key,
     required this.pizza,
     required this.isNew,
+    this.onSave,
   });
 
   @override
@@ -132,5 +134,9 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
     setState(() {
       operationResult = result;
     });
+    if (result.isNotEmpty) {
+      widget.onSave?.call();
+      Navigator.of(context).pop();
+    }
   }
 }
